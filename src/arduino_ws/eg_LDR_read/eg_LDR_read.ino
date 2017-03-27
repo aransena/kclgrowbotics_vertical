@@ -1,8 +1,9 @@
-// Aran Sena
-// KCL
-// MIT License
-// aransena@gmail.com
-// 27.03.17
+/**
+  Aran Sena - KCL
+  aransena@gmail.com
+  27.03.17
+  MIT License
+**/
 
 
 // declare vars

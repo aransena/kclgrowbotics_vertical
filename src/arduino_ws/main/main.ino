@@ -8,24 +8,46 @@
 #include <ros.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Empty.h>
+#include <std_msgs/Int16.h>
 
-#include "Test.h"
+#define NUM_LDR 16
 
 // declare vars
-int x;
-Test val1;
 
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600); // Start Serial
+void LDR_update(int *LDR_vals){
+  for(int i = 0; i < NUM_LDR; i++){
+    LDR_vals[i] = analogRead(i);
+  }
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  val1.increase();
-  val1.increase();
-  x = val1.get_val();
-  
-  Serial.print("Test = ");
-  Serial.println(x);
+void messageCb( const std_msgs::Empty& toggle_msg){
+  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
+}
+
+
+ros::NodeHandle  nh;
+ros::Subscriber<std_msgs::Empty> sub("toggle_led", messageCb );
+std_msgs::String str_msg;
+std_msgs::Int16 int_msg;
+ros::Publisher chatter("chatter", &int_msg);
+
+void setup()
+{
+  pinMode(13, OUTPUT);
+  nh.initNode();
+  nh.advertise(chatter);
+  nh.subscribe(sub);
+}
+
+int LDR_vals[NUM_LDR];
+void loop()
+{
+  LDR_update(LDR_vals);
+  for(int i = 0; i < NUM_LDR; i++){
+    int_msg.data = LDR_vals[i]+(1000*i);
+    //str_msg.data = ;
+    chatter.publish( &int_msg );
+  }
+  nh.spinOnce();
+  delay(1000);
 }

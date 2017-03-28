@@ -1,0 +1,53 @@
+//void LEDControl( const arduino_ws::Adc_Mega& LEDctl_msg);
+
+//arduino_ws::LED_State led_msg;
+//ros::Subscriber<arduino_ws::Adc_Mega> led_ctl("LDR_data", LEDControl );
+//ros::Publisher led_pub("LED_data", &led_msg);
+
+void LEDControl( const arduino_ws::Adc_Mega& LEDctl_msg) {
+  
+}
+
+
+
+//  nh.advertise(led_pub);
+//  nh.subscribe(led_ctl);
+
+//  led_msg.red = malloc(NUM_LEDS);
+//  led_msg.green = malloc(NUM_LEDS);
+//  led_msg.blue = malloc(NUM_LEDS);
+//  
+//  led_msg.red_length = NUM_LEDS;
+//  led_msg.red = malloc(NUM_LEDS);
+//
+//  led_msg.green_length = NUM_LEDS;
+//  
+//  led_msg.blue_length = NUM_LEDS;
+
+
+//  
+//  led_msg.id = 0;
+//  led_msg.red = 1;
+//  led_msg.green = 2;
+//  led_msg.blue = 3;
+
+  //led_pub.publish(&led_msg);
+  //led_pub.publish(&led_msg);
+
+
+ldr_msg.adc0 = analogRead(0);
+ldr_msg.adc1 = analogRead(1);
+ldr_msg.adc2 = analogRead(2);
+ldr_msg.adc3 = analogRead(3);
+ldr_msg.adc4 = analogRead(4);
+ldr_msg.adc5 = analogRead(5);
+ldr_msg.adc6 = analogRead(6);
+ldr_msg.adc7 = analogRead(7);
+ldr_msg.adc8 = analogRead(8);
+ldr_msg.adc9 = analogRead(9);
+ldr_msg.adc10 = analogRead(10);
+ldr_msg.adc11 = analogRead(11);
+ldr_msg.adc12 = analogRead(12);
+ldr_msg.adc13 = analogRead(13);
+ldr_msg.adc14 = analogRead(14);
+ldr_msg.adc15 = analogRead(15);   

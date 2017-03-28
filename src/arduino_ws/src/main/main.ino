@@ -13,10 +13,10 @@
 #include "FastLED.h"
 
 #define NUM_LDR 16
-#define NUM_LEDS 4
+#define NUM_LEDS 60
 #define DATA_PIN 3
 #define LED_TYPE WS2811
-#define COLOR_ORDER RGB
+#define COLOR_ORDER GRB
 #define UPDATES_PER_SECOND 100
 
 // prototypes
@@ -59,13 +59,13 @@ void LEDControl( const arduino_ws::Adc_Mega& LEDctl_msg) {
 
 void setup()
 {
-  //delay(3000);
-  //FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+  //delay(3000); //safety delay
+  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
 
   pinMode(13, OUTPUT);
   nh.initNode();
   nh.advertise(ldr_pub);
-  nh.advertise(led_pub);
+  //nh.advertise(led_pub);
   nh.subscribe(led_ctl);
 
 //  led_msg.red = malloc(NUM_LEDS);
@@ -91,18 +91,27 @@ void loop()
   led_msg.red = 1;
   led_msg.green = 2;
   led_msg.blue = 3;
-
+  for(int i = 0; i < NUM_LDR; i++){
+    if(LDR_vals[i]<300){
+      leds[i]=CRGB::Green;
+    }
+    else if(LDR_vals[i]<400){
+      leds[i]=CRGB::Blue;
+    }
+    else if(LDR_vals[i]>400){
+      leds[i]=CRGB::Red;
+    }
+  }
 
   memcpy(&ldr_msg.data, &LDR_vals, sizeof ldr_msg.data);
 
   ldr_pub.publish( &ldr_msg );
-  led_pub.publish(&led_msg);
-  nh.spinOnce();
-  delay(10);
+  //led_pub.publish(&led_msg);
 
 
-  led_pub.publish(&led_msg);
+//  led_pub.publish(&led_msg);
   nh.spinOnce();
+  FastLED.show();
   delay(10);
 }
 

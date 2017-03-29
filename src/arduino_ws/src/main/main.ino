@@ -12,7 +12,7 @@
 #endif
 #include <ros.h>
 #include <arduino_ws/Adc_Mega.h>
-#include <arduino_ws/LED_State.h>
+#include <arduino_ws/HSV.h>
 #include "FastLED.h"
 
 //////// defs ////////
@@ -43,6 +43,8 @@ bool pubchk = false;
 //////// ROS defs ////////
 ros::NodeHandle  nh;
 arduino_ws::Adc_Mega ldr_msg;
+
+
 ros::Publisher ldr_pub("LDR_data", &ldr_msg);
 ros::Subscriber<arduino_ws::Adc_Mega> led_sub("LED_interface", LED_callback );
 
@@ -57,31 +59,22 @@ void LDR_update(arduino_ws::Adc_Mega &ldr_msg){//int *LDR_vals) {
   
 }
 
-void LED_callback(const arduino_ws::Adc_Mega& led_cmd){
-  
+void LED_callback(const arduino_ws::Adc_Mega& led_cmd){  
+  digitalWrite(13, HIGH);
   if(first_msg==true){
     pubchk = true;  
     first_msg = false;  
+    
   }
-    for(int i=0; i<NUM_LDR; i++){
-      
-      switch (led_cmd.data[i]) {
-        case 0:    // your hand is on the sensor
-          //leds[i]=CRGB::Blue;
-          leds[i]=CHSV( 160, 255, 255);
-          break;
-        case 1:    // your hand is close to the sensor
-          //leds[i]=CRGB::Green;
-          leds[i]=CHSV( 100, 255, 255);
-          break;
-        case 2:    // your hand is a few inches from the sensor
-          //leds[i]=CRGB::Red;
-          leds[i]=CHSV( 224, 255, 255);
-      }
-    }
-    digitalWrite(13, HIGH-digitalRead(13));   // blink the led
 
-    FastLED.show();
+  for(int i=0; i<NUM_LED; i++){
+    leds[i] = CHSV(led_cmd.data[i],255,255);
+  }
+
+  FastLED.show();
+  delay(10);
+
+    
 }
 
 //% End Function defs 
@@ -91,10 +84,12 @@ long tstart;
 void setup()
 {
   pinMode(13, OUTPUT);
-
+  digitalWrite(13, HIGH);
+  delay(1000);
+  digitalWrite(13, LOW);
   nh.initNode();
   nh.subscribe(led_sub); 
-//  nh.advertise(ldr_pub);
+  nh.advertise(ldr_pub);
   nh.spinOnce();
   
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LED);  
@@ -120,6 +115,7 @@ void loop()
 }
 
 //% End Program 
+
 
 
 

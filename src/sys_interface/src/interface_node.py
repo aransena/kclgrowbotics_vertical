@@ -27,6 +27,7 @@ def LDR_callback(data):
     shelf_state_pub = rospy.Publisher('shelf_state', Adc_Mega, queue_size=10)
 
     output = Adc_Mega()
+
     output.data = []
     for val in data.data:
         if val > upper_lim:

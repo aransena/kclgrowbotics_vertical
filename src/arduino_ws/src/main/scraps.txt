@@ -50,4 +50,16 @@ ldr_msg.adc11 = analogRead(11);
 ldr_msg.adc12 = analogRead(12);
 ldr_msg.adc13 = analogRead(13);
 ldr_msg.adc14 = analogRead(14);
-ldr_msg.adc15 = analogRead(15);   
+ldr_msg.adc15 = analogRead(15);
+
+//  for(int i = 0; i < NUM_LDR; i++){
+//      if(ldr_msg.data[i]<300){//LDR_vals[i]
+//        leds[i]=CRGB::Green;
+//      }
+//      else if(ldr_msg.data[i]<400){
+//        leds[i]=CRGB::Blue;
+//      }
+//      else if(ldr_msg.data[i]>400){
+//        leds[i]=CRGB::Red;
+//      }
+//  }   

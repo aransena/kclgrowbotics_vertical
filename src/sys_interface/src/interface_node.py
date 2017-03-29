@@ -3,7 +3,7 @@ import rospy
 import time
 from arduino_ws.msg import Adc_Mega
 
-global dt, first, upper_lim
+global dt, first, upper_lim, led_pub
 
 def get_LDR_cal():
     global upper_lim
@@ -18,7 +18,6 @@ def LDR_callback(data):
 
     if first:
         get_LDR_cal()
-        print "FIRST", upper_lim
         first = False
 
     if time.time()-dt > 1:
@@ -27,28 +26,29 @@ def LDR_callback(data):
 
     shelf_state_pub = rospy.Publisher('shelf_state', Adc_Mega, queue_size=10)
 
-    output=[]
+    output = Adc_Mega()
+    output.data = []
     for val in data.data:
         if val > upper_lim:
-            output.append(0)
+            output.data.append(0)
         else:
-            output.append(1)
+            output.data.append(1)
     shelf_state_pub.publish(output)
 
 
 def LED_callback(data):
-    led_pub = rospy.Publisher('LED_interface', Adc_Mega, queue_size=10)
+    global led_pub
     #  print data.data
     led_pub.publish(data)
 
 
 if __name__ == '__main__':
-    global dt, first
+    global dt, first, led_pub
     first = True
     dt = time.time()
     rospy.init_node('interface_node', anonymous=True)
     rospy.Subscriber("LDR_data", Adc_Mega, LDR_callback)
     rospy.Subscriber("LED_master", Adc_Mega, LED_callback)
-
+    led_pub = rospy.Publisher('LED_interface', Adc_Mega, queue_size=10)
 
     rospy.spin()

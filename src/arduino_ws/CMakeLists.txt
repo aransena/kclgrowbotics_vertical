@@ -51,7 +51,8 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
     FILES
     Adc_Mega.msg
-		LED_State.msg
+    HSV.msg
+    LED_State.msg
 #   Message1.msg
 #   Message2.msg
  )

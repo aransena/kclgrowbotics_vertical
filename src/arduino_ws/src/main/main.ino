@@ -68,11 +68,17 @@ void LED_callback(const arduino_ws::Adc_Mega& led_cmd){
   }
 
   for(int i=0; i<NUM_LED; i++){
-    leds[i] = CHSV(led_cmd.data[i],255,255);
+    if(led_cmd.data[i] == -1){
+      leds[i] = CHSV(0,0,0);
+    }
+    else{
+      leds[i] = CHSV(led_cmd.data[i],255,255);
+    }
   }
 
   FastLED.show();
-  delay(10);
+  nh.spinOnce();
+  delay(20);
 
     
 }
@@ -99,14 +105,14 @@ void setup()
 void loop()
 {
   LDR_update(ldr_msg);//LDR_vals);  
-  //if(millis() - tstart>30000){
-  if(pubchk == true){
+//  if(millis() - tstart>30000){
+//  if(pubchk == true){
     ldr_pub.publish( &ldr_msg );  
-    delay(20);
-  }
-  else{
-    delay(20);
-  }
+    delay(30);
+//  }
+//  else{
+//    delay(20);
+//  }
   
   nh.spinOnce();
   

@@ -1,1 +1,1 @@
-uint16[16] data
+int16[16] data

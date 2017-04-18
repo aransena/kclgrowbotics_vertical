@@ -30,10 +30,10 @@ def LDR_callback(data):
 
     output.data = []
     for val in data.data:
-        if val > upper_lim:
-            output.data.append(0)
-        else:
+        if val < upper_lim:
             output.data.append(1)
+        else:
+            output.data.append(0)
     shelf_state_pub.publish(output)
 
 
